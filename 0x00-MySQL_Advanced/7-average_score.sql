@@ -12,7 +12,7 @@ BEGIN
 	FROM corrections AS c
 	WHERE c.user_id = user_id;
 
-	UPDATE users SET average_score = average
+	UPDATE users SET average_score = IFNULL(average, 0)
 	WHERE users.id = user_id;
 END //
 DELIMITER ;
