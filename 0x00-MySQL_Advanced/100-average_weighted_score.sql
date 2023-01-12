@@ -26,6 +26,6 @@ BEGIN
             SET users.average_score = weighted_score_sum / weight_sum
             WHERE users.id = user_id;
     END IF;
-END //
+END //;
 DELIMITER ;
 
