@@ -6,7 +6,7 @@ DROP PROCEDURE IF EXISTS ComputeAverageScoreForUser;
 DELIMITER //
 CREATE PROCEDURE ComputeAverageScoreForUser(user_id INT)
 BEGIN
-	DECLARE average INT DEFAULT 0;
+	DECLARE average FLOAT DEFAULT 0;
 	
 	SELECT AVG(score) INTO average
 	FROM corrections AS c
