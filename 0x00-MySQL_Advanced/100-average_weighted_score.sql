@@ -5,7 +5,7 @@ DROP PROCEDURE IF EXISTS ComputeAverageWeightedScoreForUser;
 DELIMITER //
 CREATE PROCEDURE ComputeAverageWeightedScoreForUser (user_id INT)
 BEGIN
-	DECLARE weight_avg INT DEFAULT 0;
+	DECLARE weight_avg FLOAT DEFAULT 0;
 	
 	SELECT SUM(corrections.score * projects.weight) / SUM(projects.weight)
 	INTO weight_avg FROM corrections
