@@ -12,9 +12,9 @@ def count_calls(method: Callable) -> Callable:
     """ Decorator. """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        method(self, *args, **kwargs)
         key = method.__qualname__
-        self._redis.incr(key, 1)
+        self._redis.incr(key)
+        return method(self, *args, **kwargs);
     return wrapper
 
 
