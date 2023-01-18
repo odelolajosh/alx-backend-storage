@@ -9,12 +9,14 @@ Data = Union[str, bytes, int, float]
 
 
 def count_calls(method: Callable) -> Callable:
-    """ Decorator. """
+    """ counts how many times methods in Cache class are called. """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        key = method.__qualname__
-        self._redis.incr(key)
-        return method(self, *args, **kwargs);
+        """ decorator wrapper """
+        if isinstance(self, Cache):
+            key = method.__qualname__
+            self._redis.incr(key)
+        return method(self, *args, **kwargs)
     return wrapper
 
 
