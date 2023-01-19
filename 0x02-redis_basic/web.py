@@ -9,18 +9,21 @@ from typing import Callable
 def counter_url(fn: Callable) -> Callable:
     """ counter decorator. """
     @wraps(fn)
-    def wrapper(url: str) -> str:
+    def wrapper(*args, **kwargs):
         """ wrapper function. """
+        if not args:
+            return fn(*args, **kwargs)
+        
         cache = redis.Redis()
-        res_key = f"result:{url}"
-        count_key = f"count:{url}"
+        key = f"result:{args[0]}"
+        count_key = f"count:{args[0]}"
 
-        if cache.exists(res_key):
-            cache.incr(count_key)
-            return cache.get(res_key)
+        cache.incr(count_key)
+        if cache.exists(key):
+            return cache.get(key)
 
-        result = fn(url)
-        cache.setex(res_key, 10, result)
+        result = fn(*args, **kwargs)
+        cache.setex(key, 10, result)
         return result
     return wrapper
 
