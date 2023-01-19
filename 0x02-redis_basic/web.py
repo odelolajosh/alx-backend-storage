@@ -10,10 +10,10 @@ def counter(fn: Callable) -> Callable:
     """ counter decorator. """
     @wraps(fn)
     def wrapper(*args, **kwargs):
-        url = args[0]
+        """ wrapper function. """
         cache = redis.Redis()
-        res_key = f"result:{url}"
-        count_key = f"count:{url}"
+        res_key = f"result:{args[0]}"
+        count_key = f"count:{args[0]}"
 
         if cache.exists(res_key):
             cache.incr(count_key)
@@ -27,5 +27,6 @@ def counter(fn: Callable) -> Callable:
 
 @counter
 def get_page(url: str) -> str:
+    """ obtain content of a URL. """
     r = requests.get(url)
     return r.text
