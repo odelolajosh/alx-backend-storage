@@ -9,7 +9,7 @@ from typing import Callable
 def counter(fn: Callable) -> Callable:
     """ counter decorator. """
     @wraps(fn)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> str:
         """ wrapper function. """
         cache = redis.Redis()
         res_key = f"result:{args[0]}"
