@@ -4,11 +4,14 @@ import requests
 import redis
 from functools import wraps
 from typing import Callable
+from datetime import timedelta
 
 
-def counter_url(func: Callable) -> Callable:
+def counter_url(func: Callable[..., str]) -> Callable[..., str]:
+    """ web cache and tracker decorator. """
     @wraps(func)
     def wrapper(*args, **kwargs) -> str:
+        """ decorator wrapper. """
         url = args[0]
         cache = redis.Redis()
         key = f"result:{url}"
@@ -20,7 +23,7 @@ def counter_url(func: Callable) -> Callable:
             return cached.decode("utf-8")
 
         result = func(*args, **kwargs)
-        cache.setex(key, 10, result)
+        cache.setex(key, timedelta(seconds=10), result)
         return result
     return wrapper
 
