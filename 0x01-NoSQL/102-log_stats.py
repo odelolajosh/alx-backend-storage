@@ -8,23 +8,21 @@ if __name__ == "__main__":
     nginx = client.logs.nginx
 
     count = nginx.count_documents({})
-    print(f"{count} logs")
+    print("{} logs".format(count))
 
     print("Methods:")
     for method in ["GET", "POST", "PUT", "PATCH", "DELETE"]:
         count = nginx.count_documents({"method": method})
-        print(f"\tmethod {method}: {count}")
+        print("\tmethod {}: {}".format(method, count))
 
     count = nginx.count_documents({"method": "GET", "path": "/status"})
-    print(f"{count} status check")
+    print("{} status check".format(count))
 
     print("IPs:")
-    top_ips_res = nginx.aggregate([
-        {"$group": {"_id": "$ip", "requestCount": {"$count": {}}}},
-        {"$sort": {"requestCount": -1}},
+    ips = nginx.aggregate([
+        {"$group": {"_id": "$ip", "count": {"$count": {}}}},
+        {"$sort": {"count": -1}},
         {"$limit": 10}
     ])
-    for ip_res in top_ips_res:
-        ip = ip_res["_id"]
-        reqCount = ip_res["requestCount"]
-        print(f"\t{ip}: {reqCount}")
+    for ip in ips:
+        print("\t{}: {}".format(ip["_id"], ip["count"]))
