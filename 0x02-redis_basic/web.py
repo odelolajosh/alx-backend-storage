@@ -31,4 +31,4 @@ def counter_url(func: Callable[..., str]) -> Callable[..., str]:
 @counter_url
 def get_page(url: str) -> str:
     """ obtain content of a URL. """
-    return requests.get(url).text
+    return requests.get(url).content.decode("utf-8")
