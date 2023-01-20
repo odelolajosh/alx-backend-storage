@@ -20,7 +20,6 @@ def counter_url(func: Callable) -> Callable:
             return cached.decode("utf-8")
 
         result = func(*args, **kwargs)
-        cache.incr(count_key)
         cache.setex(key, 10, result)
         return result
     return wrapper
