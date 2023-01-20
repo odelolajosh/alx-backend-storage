@@ -7,7 +7,7 @@ from typing import Callable
 from datetime import timedelta
 
 
-def counter_url(func: Callable[..., str]) -> Callable[..., str]:
+def counter_url(func: Callable[str, str]) -> Callable[str, str]:
     """ web cache and tracker decorator. """
     @wraps(func)
     def wrapper(*args, **kwargs) -> str:
@@ -31,4 +31,4 @@ def counter_url(func: Callable[..., str]) -> Callable[..., str]:
 @counter_url
 def get_page(url: str) -> str:
     """ obtain content of a URL. """
-    return requests.get(url).content.decode("utf-8")
+    return requests.get(url).text
