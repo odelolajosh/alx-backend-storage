@@ -4,7 +4,6 @@ import requests
 import redis
 from functools import wraps
 from typing import Callable
-from datetime import timedelta
 
 
 def counter_url(func: Callable) -> Callable:
@@ -17,13 +16,12 @@ def counter_url(func: Callable) -> Callable:
         key = f"result:{url}"
         count_key = f"count:{url}"
 
-        cached = cache.get(key)
-        if cached is not None:
+        if cache.exists(key):
             cache.incr(count_key)
-            return cached.decode("utf-8")
+            return cache.get(key)
 
         result = func(*args, **kwargs)
-        cache.setex(key, timedelta(seconds=10), result)
+        cache.setex(key, 10, result)
         return result
     return wrapper
 
