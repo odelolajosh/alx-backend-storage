@@ -13,11 +13,11 @@ def counter_url(func: Callable) -> Callable:
         """ decorator wrapper. """
         url = args[0]
         cache = redis.Redis()
-        key = f"result:{url}"
+        key = f"cached:{url}"
         count_key = f"count:{url}"
 
+        cache.incr(count_key)
         if cache.exists(key):
-            cache.incr(count_key)
             return cache.get(key)
 
         result = func(*args, **kwargs)
@@ -29,4 +29,4 @@ def counter_url(func: Callable) -> Callable:
 @counter_url
 def get_page(url: str) -> str:
     """ obtain content of a URL. """
-    return requests.get(url).content.decode('utf-8')
+    return requests.get(url).text
